@@ -26,11 +26,11 @@
     <h2 style="text-align:center">Zing.Arena Hub</h2>
     <div class="menu-grid" id="mainMenu">
         <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
-        <div class="menu-item" onclick="openSection('nameGen')"><span>🔤</span> Name Gen</div>
-        <div class="menu-item" onclick="openSection('tools')"><span>🛠️</span> Tools</div>
+        <div class="menu-item" onclick="window.location.href='namegen.html'"><span>🔤</span> Name Gen</div>
+        <div class="menu-item" onclick="window.location.href='tools.html'"><span>🛠️</span> Tools</div>
         <div class="menu-item" onclick="window.location.href='browser.html'"><span>🌐</span> Browser</div>
     </div>
-    <div id="contentArea" style="margin-top: 30px;"></div>
+    <br>
     <button onclick="auth.signOut().then(() => location.reload())" style="background:#ef4444;">Logout</button>
 </div>
 
@@ -55,12 +55,6 @@
             document.getElementById('appDiv').classList.remove('hidden');
         }
     });
-
-    function openSection(sec) {
-        document.getElementById('mainMenu').classList.add('hidden');
-        const area = document.getElementById('contentArea');
-        area.innerHTML = `<h3>${sec}</h3><p>Coming Soon...</p>`;
-    }
 </script>
 </body>
 </html>
