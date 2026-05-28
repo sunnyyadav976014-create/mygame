@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +24,7 @@
 
 <div class="app-container hidden" id="appDiv">
     <h2 style="text-align:center">Zing.Arena Hub</h2>
-    <div class="menu-grid">
+    <div class="menu-grid" id="mainMenu">
         <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
         <div class="menu-item" onclick="openSection('nameGen')"><span>🔤</span> Name Gen</div>
         <div class="menu-item" onclick="openSection('tools')"><span>🛠️</span> Tools</div>
@@ -57,12 +57,24 @@
     });
 
     function openSection(sec) {
+        document.getElementById('mainMenu').classList.add('hidden');
         const area = document.getElementById('contentArea');
         if(sec === 'browser') {
-            area.innerHTML = `<h3>Search Engine</h3><iframe src="https://www.google.com/search" style="width:100%; height:300px; border-radius:10px; border:none;"></iframe>`;
+            area.innerHTML = `
+                <div style="display:flex; gap:5px; margin-bottom:10px;">
+                    <input type="text" id="q" placeholder="Search..." style="width:70%; padding:10px; border-radius:8px; border:none;">
+                    <button onclick="go()" style="width:30%; margin:0;">Search</button>
+                </div>
+                <iframe id="browserFrame" src="https://www.google.com/search" style="width:100%; height:350px; border-radius:15px; border:none; background:white;"></iframe>
+            `;
         } else {
             area.innerHTML = `<h3>${sec}</h3><p>Coming Soon...</p>`;
         }
+    }
+
+    function go() {
+        let q = document.getElementById('q').value;
+        if(q) document.getElementById('browserFrame').src = "https://www.google.com/search?q=" + encodeURIComponent(q);
     }
 </script>
 </body>
