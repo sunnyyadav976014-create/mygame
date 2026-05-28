@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zing.Arena Dashboard</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <style>
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 50px; margin: 0; }
+        .app-container { width: 90%; max-width: 400px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
+        .menu-item:hover { background: #3b82f6; transform: translateY(-5px); }
+        .hidden { display: none; }
+        button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #3b82f6; color: white; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container" id="loginDiv">
+    <h2 style="text-align:center">Zing.Arena Login</h2>
+    <button onclick="googleLogin()">Login with Google</button>
+</div>
+
+<div class="app-container hidden" id="appDiv">
+    <h2 style="text-align:center">Zing.Arena Hub</h2>
+    <div class="menu-grid">
+        <div class="menu-item" onclick="window.location.href='player.html'"><span>🎬</span> Player</div>
+        <div class="menu-item" onclick="openSection('nameGen')"><span>🔤</span> Name Gen</div>
+        <div class="menu-item" onclick="openSection('tools')"><span>🛠️</span> Tools</div>
+        <div class="menu-item" onclick="openSection('browser')"><span>🌐</span> Browser</div>
+    </div>
+    <div id="contentArea" style="margin-top: 30px;"></div>
+    <button onclick="auth.signOut().then(() => location.reload())" style="background:#ef4444;">Logout</button>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDg-_--DQoINvqsMOAYfbwEnDyvMgH88-w",
+        authDomain: "zing-arena.firebaseapp.com",
+        databaseURL: "https://zing-arena-default-rtdb.firebaseio.com",
+        projectId: "zing-arena",
+        storageBucket: "zing-arena.firebasestorage.app",
+        messagingSenderId: "749170646467",
+        appId: "1:749170646467:web:1d279de6a84a0340bcf176"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function googleLogin() { auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()); }
+
+    auth.onAuthStateChanged(user => {
+        if(user) {
+            document.getElementById('loginDiv').classList.add('hidden');
+            document.getElementById('appDiv').classList.remove('hidden');
+        }
+    });
+
+    function openSection(sec) {
+        const area = document.getElementById('contentArea');
+        if(sec === 'browser') {
+            area.innerHTML = `<h3>Search Engine</h3><iframe src="https://www.google.com/search" style="width:100%; height:300px; border-radius:10px; border:none;"></iframe>`;
+        } else {
+            area.innerHTML = `<h3>${sec}</h3><p>Coming Soon...</p>`;
+        }
+    }
+</script>
+</body>
+</html>
