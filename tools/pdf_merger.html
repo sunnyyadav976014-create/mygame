@@ -1,13 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>PDF Merger - Zing Arena</title>
-    <script src="https://unpkg.com/pdf-merger-js@4.0.0/browser/bundle.js"></script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <style>
         body { background: #0f172a; color: white; text-align: center; font-family: sans-serif; padding: 20px; }
         .box { background: #1e293b; padding: 25px; border-radius: 15px; max-width: 400px; margin: auto; }
-        input { margin: 20px 0; color: white; }
         button { padding: 12px 25px; background: #3b82f6; border: none; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
@@ -15,7 +14,7 @@
     <h2>🔗 PDF Merger</h2>
     <div class="box">
         <input type="file" id="pdfInput" accept="application/pdf" multiple>
-        <br>
+        <br><br>
         <button id="mergeBtn" onclick="mergePDFs()">Merge & Download</button>
         <p id="status"></p>
     </div>
@@ -26,37 +25,37 @@
         async function mergePDFs() {
             const fileInput = document.getElementById('pdfInput');
             const status = document.getElementById('status');
-            const btn = document.getElementById('mergeBtn');
             
             if (fileInput.files.length < 2) {
                 alert("Kam se kam 2 PDF file select karo!");
                 return;
             }
 
-            status.innerText = "Merging... ruk jao bhai...";
-            btn.disabled = true;
-
+            status.innerText = "Merging... please wait...";
+            
             try {
-                const merger = new PDFMerger();
+                const mergedPdf = await PDFLib.PDFDocument.create();
                 
                 for (const file of fileInput.files) {
-                    await merger.add(file);
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await PDFLib.PDFDocument.load(arrayBuffer);
+                    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+                    copiedPages.forEach((page) => mergedPdf.addPage(page));
                 }
 
-                const mergedPdfBlob = await merger.saveAsBlob();
-                const url = URL.createObjectURL(mergedPdfBlob);
+                const mergedPdfBytes = await mergedPdf.save();
+                const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
                 
+                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = "ZingArena_Merged.pdf";
                 a.click();
                 
-                status.innerText = "Done! Download ho gaya.";
+                status.innerText = "Done! Download shuru ho gaya.";
             } catch (error) {
                 console.error(error);
-                status.innerText = "Error aa gaya, file check karo!";
-            } finally {
-                btn.disabled = false;
+                status.innerText = "Error: File shayad corrupt hai!";
             }
         }
     </script>
