@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="monetag" content="9a386cc7ec63b137b8ff06a02b6f8c53">
+    <meta charset="UTF-8">
     <title>Zing.Arena Dashboard</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
@@ -35,10 +35,12 @@
 </div>
 
 <script>
-    // Ye code ensure karega ki jaise hi user kahin bhi click kare, ad khul jaye (Popunder experience)
+    // Logic: Ad sirf ek baar khulega per session
     window.onclick = function() {
-        window.open('https://omg10.com/4/11073072', '_blank');
-        window.onclick = null; // Taaki sirf ek hi baar khule
+        if (!sessionStorage.getItem('adShown')) {
+            window.open('https://omg10.com/4/11073072', '_blank');
+            sessionStorage.setItem('adShown', 'true');
+        }
     };
 
     const firebaseConfig = {
