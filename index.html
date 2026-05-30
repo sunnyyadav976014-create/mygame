@@ -39,7 +39,7 @@
     // Ads ka code
     window.onclick = function() {
         if (!sessionStorage.getItem('adShown')) {
-            window.open('https://omg10.com/4/11073072', '_system'); // _system force karta hai external browser khulne ke liye
+            window.open('https://omg10.com/4/11073072', '_system');
             sessionStorage.setItem('adShown', 'true');
         }
     };
@@ -53,26 +53,29 @@
         messagingSenderId: "749170646467",
         appId: "1:749170646467:web:1d279de6a84a0340bcf176"
     };
-    firebase.initializeApp(firebaseConfig);
+    
+    // Sirf ek baar initialize ho
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
     const auth = firebase.auth();
 
-    // Login Fix: Popup ki jagah Redirect use karo
+    // Login Redirect
     function googleLogin() { 
         auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); 
     }
 
-    // Login hone ke baad check karna
-    auth.getRedirectResult().then(result => {
-        if (result.user) {
-            document.getElementById('loginDiv').classList.add('hidden');
-            document.getElementById('appDiv').classList.remove('hidden');
-        }
-    }).catch(error => console.log(error));
+    // Result handle karna
+    auth.getRedirectResult().catch(error => console.log(error));
 
+    // UI state update
     auth.onAuthStateChanged(user => {
         if(user) {
             document.getElementById('loginDiv').classList.add('hidden');
             document.getElementById('appDiv').classList.remove('hidden');
+        } else {
+            document.getElementById('loginDiv').classList.remove('hidden');
+            document.getElementById('appDiv').classList.add('hidden');
         }
     });
 </script>
