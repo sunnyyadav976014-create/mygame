@@ -36,7 +36,6 @@
 </div>
 
 <script>
-    // Ads ka code
     window.onclick = function() {
         if (!sessionStorage.getItem('adShown')) {
             window.open('https://omg10.com/4/11073072', '_system');
@@ -44,31 +43,27 @@
         }
     };
 
+    // Updated keys from your screenshot
     const firebaseConfig = {
         apiKey: "AIzaSyDg-_--DQoINvqsMOAYfbwEnDyvMgH88-w",
         authDomain: "zing-arena.firebaseapp.com",
-        databaseURL: "https://zing-arena-default-rtdb.firebaseio.com",
         projectId: "zing-arena",
-        storageBucket: "zing-arena.firebasestorage.app",
+        storageBucket: "zing-arena.appspot.com",
         messagingSenderId: "749170646467",
         appId: "1:749170646467:web:1d279de6a84a0340bcf176"
     };
     
-    // Sirf ek baar initialize ho
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
     const auth = firebase.auth();
 
-    // Login Redirect
     function googleLogin() { 
         auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); 
     }
 
-    // Result handle karna
-    auth.getRedirectResult().catch(error => console.log(error));
+    auth.getRedirectResult().catch(error => console.error(error));
 
-    // UI state update
     auth.onAuthStateChanged(user => {
         if(user) {
             document.getElementById('loginDiv').classList.add('hidden');
