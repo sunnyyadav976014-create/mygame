@@ -7,7 +7,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <style>
-        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 50px; margin: 0; }
+        body { background: #0f172a; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding-top: 50px; margin: 0; min-height: 100vh; }
         .app-container { width: 90%; max-width: 400px; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
         .menu-item { background: #1e293b; padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #334155; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3); }
@@ -36,6 +36,7 @@
 </div>
 
 <script>
+    // Ads code
     window.onclick = function() {
         if (!sessionStorage.getItem('adShown')) {
             window.open('https://omg10.com/4/11073072', '_system');
@@ -43,7 +44,6 @@
         }
     };
 
-    // Updated keys from your screenshot
     const firebaseConfig = {
         apiKey: "AIzaSyDg-_--DQoINvqsMOAYfbwEnDyvMgH88-w",
         authDomain: "zing-arena.firebaseapp.com",
@@ -58,12 +58,20 @@
     }
     const auth = firebase.auth();
 
+    // Redirect use karne se app ke andar rehne ke chances badh jaate hain
     function googleLogin() { 
         auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider()); 
     }
 
-    auth.getRedirectResult().catch(error => console.error(error));
+    // Login hone ke baad bina refresh kiye UI update
+    auth.getRedirectResult().then((result) => {
+        if (result.user) {
+            document.getElementById('loginDiv').classList.add('hidden');
+            document.getElementById('appDiv').classList.remove('hidden');
+        }
+    }).catch(error => console.error(error));
 
+    // Session maintain karne ke liye
     auth.onAuthStateChanged(user => {
         if(user) {
             document.getElementById('loginDiv').classList.add('hidden');
